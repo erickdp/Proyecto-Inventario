@@ -6,10 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import lombok.*;
+import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -17,31 +21,25 @@ import lombok.*;
  */
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "persona")
-public class Persona implements Serializable {
+@Builder
+@Table(name = "descuento")
+public class Descuento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_persona")
-    private Long idPersona;
-
-    @NotEmpty(message = "Cédula de identidad inválida")
-    private String ci;
+    @Column(name = "id_descuento")
+    private Long idDescuento;
 
     @NotEmpty
-    private String nombre;
-    
-    @NotEmpty
-    private String apellido;
-    
-    @Email(message = "Debe ingresar un email valido")
-    private String email;
-    
-    private String telefono;
+    private String descripcion;
+
+    @NotNull
+    private double descuento;
+
+    private String estado; // El estado en la base de datos por default es ACTIVO
     
 }

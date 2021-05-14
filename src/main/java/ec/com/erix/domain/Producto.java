@@ -7,9 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import lombok.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -17,31 +21,28 @@ import lombok.*;
  */
 @Entity
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "persona")
-public class Persona implements Serializable {
+@AllArgsConstructor
+@Builder
+@Table(name = "producto")
+public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_persona")
-    private Long idPersona;
+    @Column(name = "id_producto")
+    private Long idProducto;
 
-    @NotEmpty(message = "Cédula de identidad inválida")
-    private String ci;
-
-    @NotEmpty
+    @NotEmpty(message = "El artículo debe de tener un nombre")
     private String nombre;
-    
+
+    @NotNull
+    private double precioUnitario;
+
+    @NotNull
+    private int stock;
+
     @NotEmpty
-    private String apellido;
-    
-    @Email(message = "Debe ingresar un email valido")
-    private String email;
-    
-    private String telefono;
-    
+    private String estado;
 }
