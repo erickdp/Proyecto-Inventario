@@ -44,7 +44,7 @@ public class Factura implements Serializable {
     private String codigoFactura;
 
     @ManyToOne
-    @JoinColumn(name = "id_p_usuario", referencedColumnName = "id_p_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
     
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}) // No se pone el mapped por que no es bidireccional

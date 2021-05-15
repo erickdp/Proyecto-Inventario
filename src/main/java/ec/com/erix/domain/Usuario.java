@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_p_usuario")
+    @Column(name = "id_usuario")
     private Long idUsuario;
 
     @Column(name = "nombre_usuario")
@@ -44,11 +45,10 @@ public class Usuario implements Serializable {
     private String estado;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "id_p_usuario", referencedColumnName = "id_persona") // name llave foranea en mi tabla, referencedColumn nombre en la tabla origen
+    @JoinColumn(name = "id_persona") // name llave foranea en mi tabla, referencedColumn nombre en la tabla origen
     private Persona persona;
 
-    @OneToMany
-    @JoinColumn(name = "id_p_usuario") // El mapeo no es bidireccional, por esta razon hago un joinColum y con el nombre en la bbdd de la llave foranea en la tabla destino
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "usuario")
     private List<Rol> roles;
 
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
