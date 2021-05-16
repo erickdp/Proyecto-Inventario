@@ -1,30 +1,10 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Curso de Spring Boot</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      >
+    <head th:replace="layout/plantilla :: head">
+        <title>Titulo</title>
     </head>
     <body>
-        <table border="1">
-            <tr>
-                <th>Nombre</th>
-                <th>Nombre</th>
-            </tr>
-            <tr>
-                <td th:text="${usuario.nombreUsuario}"></td>
-                <td th:text="${usuario.contrasena}"></td>
-            </tr>
-        </table>
-        <table border="1">
-            <tr>
-                <th>Nombre</th>
-                <th>Nombre</th>
-            </tr>
-            <tr th:each="elRol : ${usuario.roles}">
-                <td th:text="${elRol.rol}"></td>
-                <td th:text="${elRol.idRol}"></td>
-            </tr>
-        </table>
-        
+        <header th:replace="layout/plantilla :: header"></header>
+        <footer th:replace="layout/plantilla :: footer"></footer>
     </body>
 </html>

@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:fragment="head">
+        <title>[[#{plantilla.titulo}]]</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    </head>
+    <body>
+        <header th:fragment="header">
+            <h1>[[#{plantilla.subtitulo}]]</h1>
+        </header>
+        <footer th:fragment="footer">
+            <p>
+                <a th:href="@{/(lang=es)}">ES</a> |
+                <a th:href="@{/(lang=en)}">EN</a>
+                <span>[[#{plantilla.pie-pagina}]] &COPY; Erick Diaz</span>
+            </p>
+        </footer>
+    </body>
+</html>

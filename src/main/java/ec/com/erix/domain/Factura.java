@@ -1,7 +1,7 @@
 package ec.com.erix.domain;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -51,9 +49,9 @@ public class Factura implements Serializable {
     @JoinColumn(name = "id_factura") // El mapeo no es bidireccional, defino la llave foranea que tiene la tabla DetalleFactura
     private List<DetalleFactura> detallesFactura;
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP) Si se usa esta anotacion dara un error porque solo permite usar datos de tipo Date
     @Column(name = "fecha_factura")
-    private Date fechaFactura;
+    private LocalDate fechaFactura;
 
     @NotNull
     private double subtotal;

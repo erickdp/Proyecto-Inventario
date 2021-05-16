@@ -35,12 +35,13 @@ public class Usuario implements Serializable {
     @Column(name = "id_usuario")
     private Long idUsuario;
 
-    @Column(name = "nombre_usuario")
     @NotEmpty
-    private String nombreUsuario;
+    @Column(name = "nombre_usuario")
+    private String username; // Para usar Spring security es necescario que este atributo se llame asi
 
     @NotEmpty
-    private String contrasena;
+    @Column(name = "contrasena")
+    private String password; // Lo mismo con la contrasena
 
     private String estado;
 
@@ -48,7 +49,8 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "id_persona") // name llave foranea en mi tabla, referencedColumn nombre en la tabla origen
     private Persona persona;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "usuario")
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "id_usuario")
     private List<Rol> roles;
 
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})

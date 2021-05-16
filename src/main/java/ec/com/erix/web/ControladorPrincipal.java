@@ -23,7 +23,6 @@ public class ControladorPrincipal {
     @GetMapping("/")
     public String inicio(Model model) {
         var usuario = this.usuarioService.buscar(Usuario.builder().idUsuario(Long.parseLong("1")).build());
-        log.info(usuario.getNombreUsuario() + " " + usuario.getContrasena());
         for (Rol role : usuario.getRoles()) {
             log.info(role.getRol());
         }

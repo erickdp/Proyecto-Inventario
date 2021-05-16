@@ -39,7 +39,8 @@ public class Categoria implements Serializable {
     @NotEmpty
     private String descripcion;
 
+//    Tener en cuenta la relacion bidireccion al momento de actualizar un producto y ver si se actualizan los campos
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "id_categoria")
+    @JoinColumn(name = "id_categoria") 
     private List<Producto> productos;
 }

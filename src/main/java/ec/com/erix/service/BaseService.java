@@ -12,7 +12,7 @@ public interface BaseService<T> {
 
     void guardar(T objeto);
 
-    void eliminar(T objeto);
+    void eliminarPorId(T objeto);
 
     T buscar(T objeto);
 
