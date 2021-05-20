@@ -8,6 +8,21 @@
     <body>
         <header th:fragment="header">
             <h1>[[#{plantilla.subtitulo}]]</h1>
+            <ul sec:authorize="isAuthenticated()">
+                <li>
+                    <a href="#">
+                        <span th:text="#{plantilla.saludo}"></span>
+                        <span sec:authentication="name">Usuario</span>
+                    </a>
+                </li>
+                <li>
+                    <form th:action="@{/logout}" method="POST">
+                        <a href="#" onclick="this.parentNode.submit();">
+                            [[#{plantilla.salir}]]
+                        </a>
+                    </form>
+                </li>
+            </ul>
         </header>
         <footer th:fragment="footer">
             <p>

@@ -36,7 +36,7 @@ public class Categoria implements Serializable {
     @Column(name = "id_categoria")
     private Long idCategoria;
 
-    @NotEmpty
+    @NotEmpty(message = "Debe agreagar una descripción")
     private String descripcion;
 
 //    Tener en cuenta la relacion bidireccion al momento de actualizar un producto y ver si se actualizan los campos

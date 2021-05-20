@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymelaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/plantilla :: head">
+        <title>TODO supply a title</title>
+    </head>
+    <body>
+        <section th:fragment="listadoCategoria">
+            <a th:href="@{/inventario/agregarCategoria}">[[#{accion.agregar}]]:</a>
+            <br />
+            <span>[[#{categoria.total}]]: [[${totalCategorias}]]</span>
+            <ol>
+                <li th:each="categoria : ${categorias}">
+                    <a th:href="@{/}">[[${categoria.descripcion}]]</a>
+                    
+                    <a th:href="@{/inventario/editarCategoria(idCategoria=${categoria.idCategoria})}" 
+                       sec:authorize="hasRole('ROLE_ADMIN')">[[#{accion.editar}]]</a>
+                    
+                    <a th:href="@{/inventario/eliminarCategoria(idCategoria=${categoria.idCategoria})}"
+                       sec:authorize="hasRole('ROLE_ADMIN')">[[#{accion.eliminar}]]</a>
+                </li>
+            </ol>
+        </section>
+    </body>
+</html>

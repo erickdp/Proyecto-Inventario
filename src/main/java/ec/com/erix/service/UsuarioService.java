@@ -6,6 +6,6 @@ import ec.com.erix.domain.Usuario;
  *
  * @author Erick Diaz
  */
-public interface UsuarioService extends BaseService<Usuario> {
+public interface UsuarioService extends BaseService<Usuario, Long> {
     
 }

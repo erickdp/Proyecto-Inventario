@@ -32,9 +32,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
+//    Aqui se definen todas las rutas que no necesitan ser pasadas por seguridad o que no existen
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login");
-        registry.addViewController("/errors/403").setViewName("/errors/403");
+        registry.addViewController("/").setViewName("Sin ruta");
+        registry.addViewController("/error/403").setViewName("/error/403");
+        registry.addViewController("/error/404").setViewName("/error/404");
     }
 }

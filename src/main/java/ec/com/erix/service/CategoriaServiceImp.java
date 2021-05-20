@@ -1,44 +1,43 @@
 package ec.com.erix.service;
 
-import ec.com.erix.domain.Usuario;
+import ec.com.erix.dao.CategoriaDAO;
+import ec.com.erix.domain.Categoria;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ec.com.erix.dao.UsuarioDAO;
 
 /**
  *
  * @author Erick Diaz
- */
+*/
 @Service
-public class UsuarioServiceImp implements UsuarioService {
+public class CategoriaServiceImp implements CategoriaService {
 
     @Autowired
-    private UsuarioDAO usuarioDAO;
+    private CategoriaDAO categoriaDAO;
     
     @Override
     @Transactional(readOnly = true)
-    public List<Usuario> listar() {
-        return this.usuarioDAO.findAll();
+    public List<Categoria> listar() {
+        return this.categoriaDAO.findAll();
     }
 
     @Override
     @Transactional
-    public void guardar(Usuario objeto) {
-        this.usuarioDAO.save(objeto);
+    public void guardar(Categoria objeto) {
+        this.categoriaDAO.save(objeto);
     }
 
     @Override
     @Transactional
     public void eliminarPorId(Long id) {
-        this.usuarioDAO.deleteById(id);
+        this.categoriaDAO.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Usuario buscar(Long id) {
-        return this.usuarioDAO.findById(id).orElse(null);
+    public Categoria buscar(Long id) {
+        return this.categoriaDAO.findById(id).orElse(null);
     }
-    
 }

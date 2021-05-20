@@ -6,14 +6,14 @@ import java.util.List;
  *
  * @author Erick Diaz
  */
-public interface BaseService<T> {
+public interface BaseService<T, G extends Number> {
 
     List<T> listar();
 
     void guardar(T objeto);
 
-    void eliminarPorId(T objeto);
+    void eliminarPorId(G id);
 
-    T buscar(T objeto);
+    T buscar(G id);
 
 }

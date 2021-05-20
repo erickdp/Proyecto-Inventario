@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="layout/plantilla :: head">
+        <title>TODO supply a title</title>
+    </head>
+    <body>
+        <header th:replace="layout/plantilla :: header"></header>
+        <section>
+            <form th:action="@{/inventario/guardarCategoria}" th:object="${categoria}" method="POST">
+                <input type="hidden" name="idCategoria" th:field="*{idCategoria}"/>
+                <br />
+                <label for="nombre">[[#{categoria.descripcion}]]:</label>
+                <input type="text" name="descripcion" th:field="*{descripcion}" />
+                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+                <br />
+                <input type="submit" name="guardar" value="Send" />
+            </form>
+            <div>
+                <a th:href="@{/inventario/cancelar}">[[#{accion.cancelar}]]</a>
+            </div>
+        </section>
+        <footer th:replace="layout/plantilla :: footer"></footer>
+    </body>
+</html>

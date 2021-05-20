@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/plantilla :: head">
+        <title>TODO supply a title</title>
+    </head>
+    <body>
+        <section th:fragment="listadoProductos">
+            <div th:if="${productos != null and !productos.empty}">
+
+                <table border="1">
+                    <tr>
+                        <th>#</th>
+                        <th th:text="#{producto.nombre}"></th>
+                        <th th:text="#{producto.precio}"></th>
+                        <th th:text="#{producto.stock}"></th>
+                        <th th:text="#{producto.estado}"></th>
+                    </tr>
+                    <tr th:each="producto, contador : ${productos}">
+                        <td>[[${contador.count}]]</td>
+                        <td>[[${producto.nombre}]]</td>
+                        <td>[[${new java.text.DecimalFormat('#,##0.00').format(producto.precioUnitario)}]]</td>
+                        <td>[[${producto.stock}]]</td>
+                        <td>[[${producto.estado}]]</td>
+                        <td sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a
+                               th:href="@{/editar/} + ${producto.idProducto}">
+                                [[#{accion.editar}]]
+                            </a>
+                        </td>
+                        <td sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a  
+                                th:href="@{/eliminar(idPersona=${producto.idProducto})}">
+                                [[#{accion.eliminar}]]
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div th:if="${productos.empty or productos == null}">
+                <span th:text="#{listadoProductos.lista-vacia}"></span>
+            </div>
+        </section>
+    </body>
+</html>
