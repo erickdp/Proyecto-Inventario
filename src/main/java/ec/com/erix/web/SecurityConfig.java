@@ -36,12 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/inventario/**") // Defino que se puede acceder a todos las subrutas de inventario, incluye /inventario
+                .antMatchers("/", "/inventario/**") // Defino que se puede acceder a todos las subrutas de inventario, incluye /inventario
                 .hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/inventario/", Boolean.TRUE) // El segudno parametro es para que siempre rediriga a esa URL
+//                .defaultSuccessUrl("/inventario/", Boolean.TRUE) // El segudno parametro es para que siempre rediriga a esa URL
                 .and()
                 .exceptionHandling().accessDeniedPage("/errors/403");
     }

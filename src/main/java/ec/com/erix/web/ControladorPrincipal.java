@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class ControladorPrincipal {
 
+    @Value("${desarrollador.autor}") // Inyecto valores definidos en texto.properties
+    private String autor;
+    
     @Autowired
     private CategoriaService categoriaService;
 
@@ -37,6 +41,7 @@ public class ControladorPrincipal {
     public String inicio(Model model, @AuthenticationPrincipal User user) {
 
         log.info("Usuario accedido " + user);
+        log.warn("Desarrollador del proyecto: ".concat(autor));
 
         var categorias = this.categoriaService.listar();
         model.addAttribute("categorias", categorias);
@@ -56,13 +61,14 @@ public class ControladorPrincipal {
 //        modelo.addAttribute("categoria", categoriaEditar);
 //        return "formularioCategoria";
 //    }
+    
 //    Ejemplo usando requestParam
     @RequestMapping("/editarCategoria")
     public String editar(Model modelo, @RequestParam(name = "idCategoria", required = false, defaultValue = "1") Long id) { // Request se usa cuando se desea de manera obligada o no un parametro
         var categoriaEditar = this.categoriaService.buscar(id);
         log.info("Entrando al controlador para la redireccion");
         log.info(categoriaEditar.toString());
-        this.productosAsociados = categoriaEditar.getProductos();
+        ControladorPrincipal.productosAsociados = categoriaEditar.getProductos();
         modelo.addAttribute("categoria", categoriaEditar);
         return "formularioCategoria";
     }
@@ -80,9 +86,9 @@ public class ControladorPrincipal {
         if (errores.hasErrors()) {
             return "formularioCategoria";
         }
-        categoria.setProductos(this.productosAsociados);
+        categoria.setProductos(ControladorPrincipal.productosAsociados);
         log.info("Agregando relacion de productos: " + categoria.toString());
-
+        
         this.categoriaService.guardar(categoria);
         
         return "redirect:/inventario/";
@@ -90,8 +96,8 @@ public class ControladorPrincipal {
     
     @RequestMapping("/cancelar")
     public String cancelarForm() {
-        this.productosAsociados = null;
-        return "redirect:/inventario/";
+        ControladorPrincipal.productosAsociados = null;
+        return "redirect:/inventario/"; // Si se redirige se hace un nuevo request (peticion) y se pierden todos los datos
     }
 
     @GetMapping("/eliminarCategoria")
