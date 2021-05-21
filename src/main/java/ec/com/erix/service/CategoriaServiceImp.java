@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Erick Diaz
 */
-@Service
+@Service // Esta anotacion es igual a component solo que es mas descriptiva, da a entender que ofrece un servicio
 public class CategoriaServiceImp implements CategoriaService {
 
     @Autowired

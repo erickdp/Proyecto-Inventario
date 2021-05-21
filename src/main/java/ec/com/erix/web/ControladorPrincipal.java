@@ -30,8 +30,11 @@ public class ControladorPrincipal {
     @Value("${desarrollador.autor}") // Inyecto valores definidos en texto.properties
     private String autor;
     
-    @Autowired
     private CategoriaService categoriaService;
+
+    public ControladorPrincipal(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
+    }
 
     private static List<Producto> productosAsociados;
 
