@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ec.com.erix.dao.UsuarioDAO;
+import org.springframework.context.annotation.Primary;
 
 /**
  *
  * @author Erick Diaz
  */
-@Service
+@Primary // Define que si hay mas implementaciones, esta es la primaria y la que inyectara cuando no se defina otra
+@Service("servicioUsuario")
 public class UsuarioServiceImp implements UsuarioService {
 
     @Autowired

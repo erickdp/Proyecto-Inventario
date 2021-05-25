@@ -6,9 +6,7 @@
     <body>
         <header th:replace="layout/plantilla :: header"></header>
         <section>
-            <form th:action="@{/inventario/guardarCategoria}" th:object="${categoria}" method="POST">
-                <input type="hidden" name="idCategoria" th:field="*{idCategoria}"/>
-                <br />
+            <form th:action="@{/inventario/guardarCategoria}" th:object="${categoriaN}" method="POST">
                 <label for="nombre">[[#{categoria.descripcion}]]:</label>
                 <input type="text" name="descripcion" th:field="*{descripcion}" />
                 <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>

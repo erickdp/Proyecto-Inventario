@@ -14,9 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 /**
  *
@@ -24,17 +27,16 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/inventario") // Este se llama ruta de primer nivel
+@SessionAttributes("categoriaN") // Mantiene los objetos que no estan mapeados con los form como el id esto hasta terminarlos
 @Slf4j
 public class ControladorPrincipal {
 
     @Value("${desarrollador.autor}") // Inyecto valores definidos en texto.properties
     private String autor;
     
+    @Autowired // Busca dentro del contenedor de spring este bean
+//    @Qualifier("servicioUsuario") Se define el componente a inyectar, sustituye a primary
     private CategoriaService categoriaService;
-
-    public ControladorPrincipal(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
-    }
 
     private static List<Producto> productosAsociados;
 
@@ -68,38 +70,40 @@ public class ControladorPrincipal {
 //    Ejemplo usando requestParam
     @RequestMapping("/editarCategoria")
     public String editar(Model modelo, @RequestParam(name = "idCategoria", required = false, defaultValue = "1") Long id) { // Request se usa cuando se desea de manera obligada o no un parametro
-        var categoriaEditar = this.categoriaService.buscar(id);
-        log.info("Entrando al controlador para la redireccion");
-        log.info(categoriaEditar.toString());
-        ControladorPrincipal.productosAsociados = categoriaEditar.getProductos();
-        modelo.addAttribute("categoria", categoriaEditar);
-        return "formularioCategoria";
+        var categoria = this.categoriaService.buscar(id);
+        log.info("Entrando al controlador para la redireccion, OBJETO: ".concat(categoria.toString()));
+//        ControladorPrincipal.productosAsociados = categoriaN.getProductos();
+        modelo.addAttribute("categoriaN", categoria);
+        return "/forms/formularioCategoria";
     }
 
     @RequestMapping("/agregarCategoria")
-    public String agregar(Categoria categoria) {
-        return "formularioCategoria";
+    public String agregar(Categoria categoria, Model modelo) { // @ModelAttribute es para definir el nombre con que se usan los objetos en los forms
+        modelo.addAttribute("categoriaN", categoria);
+        return "/forms/formularioCategoria";
     }
 
 //    El error esta al momento de actualizar la lista de productos asociados con la categoria REVISAR (ARREGLADO)
     @PostMapping("/guardarCategoria") // Post no se miran los parametros en la URL
-    public String guardar(@Valid Categoria categoria, Errors errores) {
-        log.info(categoria.toString());
+    public String guardar(@Valid @ModelAttribute("categoriaN") Categoria categoria, Errors errores, SessionStatus status) {
 
         if (errores.hasErrors()) {
-            return "formularioCategoria";
+            return "/forms/formularioCategoria";
         }
-        categoria.setProductos(ControladorPrincipal.productosAsociados);
+        
+//        categoria.setProductos(ControladorPrincipal.productosAsociados);
         log.info("Agregando relacion de productos: " + categoria.toString());
         
         this.categoriaService.guardar(categoria);
+        
+        status.setComplete(); // Elimino los datos de tipo SessionAttribute
         
         return "redirect:/inventario/";
     }
     
     @RequestMapping("/cancelar")
-    public String cancelarForm() {
-        ControladorPrincipal.productosAsociados = null;
+    public String cancelarForm(SessionStatus status) {
+        status.setComplete();
         return "redirect:/inventario/"; // Si se redirige se hace un nuevo request (peticion) y se pierden todos los datos
     }
 

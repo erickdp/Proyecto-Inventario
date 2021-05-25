@@ -11,6 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:texto.properties")
 public class PropertiesConfig {
     
-//    Se pude agregar properySources para definir mas archivos
+//    Se pude agregar properySources({}) para definir mas archivos
     
 }

@@ -33,7 +33,7 @@ public class Producto implements Serializable {
     @Column(name = "id_producto")
     private Long idProducto;
 
-    @NotEmpty(message = "El artículo debe de tener un nombre")
+    @NotEmpty
     private String nombre;
 
     @NotNull

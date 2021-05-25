@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import lombok.*;
 
 /**
@@ -30,7 +31,8 @@ public class Persona implements Serializable {
     @Column(name = "id_persona")
     private Long idPersona;
 
-    @NotEmpty(message = "Cédula de identidad inválida")
+    @Pattern(regexp = "[\\d]{10}") // Defino que puede haber numeros del 0-9 y que son 10
+    @NotEmpty
     private String ci;
 
     @NotEmpty
@@ -39,7 +41,7 @@ public class Persona implements Serializable {
     @NotEmpty
     private String apellido;
     
-    @Email(message = "Debe ingresar un email valido")
+    @Email
     private String email;
     
     private String telefono;
