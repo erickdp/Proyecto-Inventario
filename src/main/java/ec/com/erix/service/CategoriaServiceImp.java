@@ -2,6 +2,7 @@ package ec.com.erix.service;
 
 import ec.com.erix.dao.CategoriaDAO;
 import ec.com.erix.domain.Categoria;
+import ec.com.erix.domain.Producto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

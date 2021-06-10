@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/inventario/**") // Defino que se puede acceder a todos las subrutas de inventario, incluye /inventario
+                .antMatchers("/", "/inventario/**", "/proInventario/**") // Defino que se puede acceder a todos las subrutas de inventario, incluye /inventario
                 .hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin()

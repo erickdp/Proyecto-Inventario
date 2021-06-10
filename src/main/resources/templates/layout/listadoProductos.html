@@ -5,6 +5,7 @@
         <title>TODO supply a title</title>
     </head>
     <body>
+        <header th:replace="layout/plantilla :: header"></header>
         <section th:fragment="listadoProductos">
             <div th:if="${productos != null and !productos.empty}">
 
@@ -24,7 +25,7 @@
                         <td>[[${producto.estado}]]</td>
                         <td sec:authorize="hasRole('ROLE_ADMIN')">
                             <a
-                               th:href="@{/editar/} + ${producto.idProducto}">
+                                th:href="@{/editar/} + ${producto.idProducto}">
                                 [[#{accion.editar}]]
                             </a>
                         </td>
@@ -41,5 +42,17 @@
                 <span th:text="#{listadoProductos.lista-vacia}"></span>
             </div>
         </section>
+        <form th:action="@{/proInventario/agregarProducto}" method="POST" th:object="${producto}">
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombre}" />
+            <label>Precio</label>
+            <input type="text" th:field="*{precioUnitario}" />
+            <label>Stock</label>
+            <input type="number" th:field="*{stock}" />
+            <label>Estado</label>
+            <input type="text" th:field="*{estado}" />
+            <input type="submit" value="Enviar" />
+        </form>
+        <footer th:replace="layout/plantilla :: footer"></footer>
     </body>
 </html>

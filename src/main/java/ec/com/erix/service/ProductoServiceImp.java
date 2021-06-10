@@ -41,4 +41,9 @@ public class ProductoServiceImp implements ProductoService {
         return this.productoDAO.findById(id).orElse(null);
     }
 
+//    @Override
+//    public List<Producto> buscarPorCategoria(Long categoria) {
+//        return this.productoDAO.findByCategoria(categoria);
+//    }
+
 }

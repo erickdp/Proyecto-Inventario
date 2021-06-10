@@ -9,17 +9,24 @@
             <a th:href="@{/inventario/agregarCategoria}">[[#{accion.agregar}]]:</a>
             <br />
             <span>[[#{categoria.total}]]: [[${totalCategorias}]]</span>
-            <ol>
-                <li th:each="categoria : ${categorias}">
-                    <a th:href="@{/}">[[${categoria.descripcion}]]</a>
-                    
-                    <a th:href="@{/inventario/editarCategoria(idCategoria=${categoria.idCategoria})}" 
-                       sec:authorize="hasRole('ROLE_ADMIN')">[[#{accion.editar}]]</a>
-                    
-                    <a th:href="@{/inventario/eliminarCategoria(idCategoria=${categoria.idCategoria})}"
-                       sec:authorize="hasRole('ROLE_ADMIN')">[[#{accion.eliminar}]]</a>
-                </li>
-            </ol>
+            <table>
+                <thead>
+                    <tr>
+                        <th th:text="'Categoria'"></th>
+                        <th th:text="'Edicion'"></th>
+                        <th th:text="'Eliminacion'"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="categoria : ${categorias}">
+                        <td><a th:href="@{/inventario/productosAsociados/} + ${categoria.idCategoria}">[[${categoria.descripcion}]]</a></td>
+                        <td><a th:href="@{/inventario/editarCategoria(idCategoria=${categoria.idCategoria})}" 
+                               sec:authorize="hasRole('ROLE_ADMIN')">[[#{accion.editar}]]</a></td>
+                        <td><a th:href="@{/inventario/eliminarCategoria(idCategoria=${categoria.idCategoria})}"
+                               sec:authorize="hasRole('ROLE_ADMIN')">[[#{accion.eliminar}]]</a></td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </body>
 </html>

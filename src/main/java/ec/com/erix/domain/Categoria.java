@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 /**
  *
@@ -39,8 +40,7 @@ public class Categoria implements Serializable {
     @NotEmpty
     private String descripcion;
 
-//    Tener en cuenta la relacion bidireccion al momento de actualizar un producto y ver si se actualizan los campos
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "id_categoria") 
+//  El mapeo bidireccional es el mas apropiado, y solo se puede hacer mapeo unidireccional de muchos a uno agregando metodos adicionales
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categoria") // Necesita la persistencia para nuevos y merge para antiguos
     private List<Producto> productos;
 }
