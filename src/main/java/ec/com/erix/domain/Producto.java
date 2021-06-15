@@ -1,6 +1,7 @@
 package ec.com.erix.domain;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,7 +48,7 @@ public class Producto implements Serializable {
     @NotEmpty
     private String estado;
     
-    @ManyToOne
+    @ManyToOne // No se necesita la cascada merge pues para eliminar productos solo se actualiza su estado
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 }

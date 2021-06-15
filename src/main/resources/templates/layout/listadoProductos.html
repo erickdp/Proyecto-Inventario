@@ -25,15 +25,19 @@
                         <td>[[${producto.estado}]]</td>
                         <td sec:authorize="hasRole('ROLE_ADMIN')">
                             <a
-                                th:href="@{/editar/} + ${producto.idProducto}">
+                                th:href="@{/proInventario/editar/} + ${producto.idProducto}">
                                 [[#{accion.editar}]]
                             </a>
                         </td>
                         <td sec:authorize="hasRole('ROLE_ADMIN')">
                             <a  
-                                th:href="@{/eliminar(idPersona=${producto.idProducto})}">
+                                th:href="@{/proInventario/eliminar(productoPK=${producto.idProducto})}">
                                 [[#{accion.eliminar}]]
                             </a>
+                        </td>
+                        <td sec:authorize="hasRole('ROLE_USER')">
+                            <a th:href="@{/inventario/articuloCarrito/} + ${producto.idProducto} + '/' + ${producto.categoria.idCategoria}"
+                               th:text="${'Agregar a carrito'}"></a>
                         </td>
                     </tr>
                 </table>
@@ -42,17 +46,30 @@
                 <span th:text="#{listadoProductos.lista-vacia}"></span>
             </div>
         </section>
-        <form th:action="@{/proInventario/agregarProducto}" method="POST" th:object="${producto}">
-            <label>Nombre</label>
-            <input type="text" th:field="*{nombre}" />
-            <label>Precio</label>
-            <input type="text" th:field="*{precioUnitario}" />
-            <label>Stock</label>
-            <input type="number" th:field="*{stock}" />
-            <label>Estado</label>
-            <input type="text" th:field="*{estado}" />
-            <input type="submit" value="Enviar" />
-        </form>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <form th:action="@{/proInventario/agregarProducto}" method="POST" th:object="${producto}">
+                <input type="hidden" th:field="*{idProducto}" />
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" th:field="*{nombre}" />
+                </div>
+                <div>
+                    <label>Precio</label>
+                    <input type="text" th:field="*{precioUnitario}" />
+                </div>
+                <div>
+                    <label>Stock</label>
+                    <input type="number" th:field="*{stock}" />
+                </div>
+                <div>
+                    <label>Estado</label>
+                    <input type="text" th:field="*{estado}" />
+                </div>
+                <div>
+                    <input type="submit" value="Enviar" />
+                </div>
+            </form>
+        </div>
         <footer th:replace="layout/plantilla :: footer"></footer>
     </body>
 </html>

@@ -30,7 +30,7 @@ import org.springframework.web.bind.support.SessionStatus;
  */
 @Controller
 @RequestMapping("/inventario") // Este se llama ruta de primer nivel
-@SessionAttributes("categoriaN") // Mantiene los objetos que no estan mapeados con los form como el id esto hasta terminarlos
+@SessionAttributes({"categoriaN", "productosCarrito"}) // Mantiene los objetos que no estan mapeados con los form como el id esto hasta terminarlos
 @Slf4j
 public class ControladorPrincipal {
 
@@ -43,26 +43,42 @@ public class ControladorPrincipal {
 
     private static List<Producto> productosAsociados;
 
+    public static List<Long> productosId;
+
 //    Se llaman ruta de segundo nivel del metodo handler
 //    Primero se debe de pasar por el primer nivel y luego esta ruta
     @GetMapping({"/", "/inicio"})
     public String inicio(Model model, @AuthenticationPrincipal User user) {
-
+        if (productosId == null) {
+            productosId = new ArrayList<>();
+        }
         log.info("Usuario accedido " + user);
         log.warn("Desarrollador del proyecto: ".concat(autor));
 
         var categorias = this.categoriaService.listar();
         model.addAttribute("categorias", categorias);
         model.addAttribute("totalCategorias", categorias.size());
+        model.addAttribute("productosCarrito", productosId.size());
 
         return "index"; // Como el index esta en la raiz de templates no se debe de poner /ruta/index
+    }
+
+    /*
+    Este metodo ayuda a aumentar los articulos que vaya a agregar al carrito, sí se puede usar atributos estaticos en otra clase
+    */
+    @GetMapping("/articuloCarrito/{articulo}/{categoria}")
+    public String articuloCarrito(
+            @PathVariable(name = "articulo") Long identificadorArticulo,
+            @PathVariable(name = "categoria") Long identificadorCategoria,
+            Model modelo) {
+        productosId.add(identificadorArticulo);
+        return "redirect:/proInventario/listarProductos/".concat(String.valueOf(identificadorCategoria));
     }
 
 //    Ejemplo usando requestParam
     @GetMapping("/editarCategoria")
     public String editar(Model modelo, @RequestParam(name = "idCategoria", required = false, defaultValue = "1") Long id) { // Request se usa cuando se desea de manera obligada o no un parametro
         var categoria = this.categoriaService.buscar(id);
-        log.info("Entrando al controlador para la redireccion, OBJETO: ".concat(categoria.toString()));
 //        ControladorPrincipal.productosAsociados = categoriaN.getProductos();
         modelo.addAttribute("categoriaN", categoria);
         return "/forms/formularioCategoria";
@@ -81,9 +97,6 @@ public class ControladorPrincipal {
         if (errores.hasErrors()) {
             return "/forms/formularioCategoria";
         }
-
-//        categoria.setProductos(ControladorPrincipal.productosAsociados);
-        log.info("Agregando relacion de productos: " + categoria.toString());
 
         this.categoriaService.guardar(categoria);
 
@@ -105,7 +118,7 @@ public class ControladorPrincipal {
     }
 
     @GetMapping("/productosAsociados/{categoria}")
-    public String productosAsociados(@PathVariable(name = "categoria") Long cat, Model model) {
+    public String productosAsociados(@PathVariable(name = "categoria") Long cat) {
         return "redirect:/proInventario/listarProductos/".concat(String.valueOf(cat));
     }
 

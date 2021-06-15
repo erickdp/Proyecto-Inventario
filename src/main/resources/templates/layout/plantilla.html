@@ -10,10 +10,18 @@
             <h1>[[#{plantilla.subtitulo}]]</h1>
             <ul sec:authorize="isAuthenticated()">
                 <li>
-                    <a href="#">
+                    <a th:href="@{/inventario/}">
                         <span th:text="#{plantilla.saludo}"></span>
                         <span sec:authentication="name">Usuario</span>
                     </a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_USER')">
+                    <div th:if="${productosCarrito} != 0">
+                        <a th:href="@{/carrito/objetosCompra}" th:text="'Objetos en carrito:' + ${productosCarrito}"></a>
+                    </div>
+                    <div th:if="${productosCarrito} == 0">
+                        <a th:href="@{/carrito/objetosCompra}" th:text="'Aun no hay objetos que comprar'"></a>
+                    </div>
                 </li>
                 <li>
                     <form th:action="@{/logout}" method="POST">
