@@ -4,7 +4,9 @@ import ec.com.erix.domain.Categoria;
 import ec.com.erix.domain.Producto;
 import ec.com.erix.service.CategoriaService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +45,14 @@ public class ControladorPrincipal {
 
     private static List<Producto> productosAsociados;
 
-    public static List<Long> productosId;
+    public static Map<Long, Integer> productosId;
 
 //    Se llaman ruta de segundo nivel del metodo handler
 //    Primero se debe de pasar por el primer nivel y luego esta ruta
     @GetMapping({"/", "/inicio"})
     public String inicio(Model model, @AuthenticationPrincipal User user) {
         if (productosId == null) {
-            productosId = new ArrayList<>();
+            productosId = new HashMap<>();
         }
         log.info("Usuario accedido " + user);
         log.warn("Desarrollador del proyecto: ".concat(autor));
@@ -58,20 +60,30 @@ public class ControladorPrincipal {
         var categorias = this.categoriaService.listar();
         model.addAttribute("categorias", categorias);
         model.addAttribute("totalCategorias", categorias.size());
-        model.addAttribute("productosCarrito", productosId.size());
+        
+        int cantidad = 0;
+        for (Integer value : ControladorPrincipal.productosId.values()) {
+            cantidad += value;
+        }
+        
+        model.addAttribute("productosCarrito", cantidad);
 
         return "index"; // Como el index esta en la raiz de templates no se debe de poner /ruta/index
     }
 
     /*
     Este metodo ayuda a aumentar los articulos que vaya a agregar al carrito, sí se puede usar atributos estaticos en otra clase
-    */
+     */
     @GetMapping("/articuloCarrito/{articulo}/{categoria}")
     public String articuloCarrito(
             @PathVariable(name = "articulo") Long identificadorArticulo,
             @PathVariable(name = "categoria") Long identificadorCategoria,
             Model modelo) {
-        productosId.add(identificadorArticulo);
+        if (productosId.containsKey(identificadorArticulo)) { // Ya hay un articulo y se aumenta la canitadad
+            productosId.put(identificadorArticulo, Integer.sum(productosId.get(identificadorArticulo), 1));
+        } else { // Es un nuevo articulo agregado al carrito
+            productosId.put(identificadorArticulo, 1);
+        }
         return "redirect:/proInventario/listarProductos/".concat(String.valueOf(identificadorCategoria));
     }
 
@@ -120,6 +132,12 @@ public class ControladorPrincipal {
     @GetMapping("/productosAsociados/{categoria}")
     public String productosAsociados(@PathVariable(name = "categoria") Long cat) {
         return "redirect:/proInventario/listarProductos/".concat(String.valueOf(cat));
+    }
+    
+    @GetMapping("/terminar")
+    public String terminarTransaccion() {
+        productosId = null;
+        return "redirect:/inventario/";
     }
 
 }

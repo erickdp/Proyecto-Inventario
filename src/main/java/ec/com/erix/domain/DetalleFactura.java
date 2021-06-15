@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,9 +42,10 @@ public class DetalleFactura implements Serializable {
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     private Producto producto;
 
-    @NotEmpty
+    @NotNull
     private int cantidad;
 
-    @NotEmpty
+    @NotNull
     private double total;
+
 }

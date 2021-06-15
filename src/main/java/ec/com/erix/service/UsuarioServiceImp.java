@@ -42,5 +42,10 @@ public class UsuarioServiceImp implements UsuarioService {
     public Usuario buscar(Long id) {
         return this.usuarioDAO.findById(id).orElse(null);
     }
+
+    @Override
+    public Usuario buscarPorNombreDeUsuario(String nombreUsuario) {
+        return this.usuarioDAO.findByUsername(nombreUsuario);
+    }
     
 }

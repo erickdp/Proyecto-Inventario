@@ -8,4 +8,6 @@ import ec.com.erix.domain.Usuario;
  */
 public interface UsuarioService extends BaseService<Usuario, Long> {
     
+    Usuario buscarPorNombreDeUsuario(String nombreUsuario);
+    
 }

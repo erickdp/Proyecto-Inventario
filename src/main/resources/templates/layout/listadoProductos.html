@@ -6,6 +6,7 @@
     </head>
     <body>
         <header th:replace="layout/plantilla :: header"></header>
+        <section th:replace="layout/plantilla :: seccion-carrito"></section>
         <section th:fragment="listadoProductos">
             <div th:if="${productos != null and !productos.empty}">
 

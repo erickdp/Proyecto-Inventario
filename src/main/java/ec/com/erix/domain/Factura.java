@@ -44,9 +44,8 @@ public class Factura implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
-    
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}) // No se pone el mapped por que no es bidireccional
-    @JoinColumn(name = "id_factura") // El mapeo no es bidireccional, defino la llave foranea que tiene la tabla DetalleFactura
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "factura")
     private List<DetalleFactura> detallesFactura;
 
 //    @Temporal(TemporalType.TIMESTAMP) Si se usa esta anotacion dara un error porque solo permite usar datos de tipo Date

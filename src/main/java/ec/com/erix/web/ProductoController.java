@@ -1,11 +1,22 @@
 package ec.com.erix.web;
 
 import ec.com.erix.domain.Categoria;
+import ec.com.erix.domain.DetalleFactura;
+import ec.com.erix.domain.Factura;
 import ec.com.erix.domain.Producto;
 import ec.com.erix.service.CategoriaService;
+import ec.com.erix.service.FacturaService;
 import ec.com.erix.service.ProductoService;
+import ec.com.erix.service.UsuarioService;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +34,7 @@ import org.springframework.web.bind.support.SessionStatus;
  */
 @Controller
 @RequestMapping("/proInventario")
-@SessionAttributes("categoriaP")
+@SessionAttributes({"categoriaP", "detallesFactura"})
 @Slf4j
 public class ProductoController {
 
@@ -33,14 +44,24 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private FacturaService facturaService;
+
     @GetMapping("/listarProductos/{categoria}")
-    public String listarProductos(@PathVariable(name = "categoria") Long id, 
+    public String listarProductos(@PathVariable(name = "categoria") Long id,
             Producto producto,
             Model model) {
         var categoria = this.categoriaService.buscar(id);
         model.addAttribute("categoriaP", categoria);
         model.addAttribute("productos", categoria.getProductos());
-        model.addAttribute("productosCarrito", ControladorPrincipal.productosId.size());
+        int cantidad = 0;
+        for (Integer value : ControladorPrincipal.productosId.values()) {
+            cantidad += value;
+        }
+        model.addAttribute("productosCarrito", cantidad);
         return "layout/listadoProductos";
     }
 
@@ -78,4 +99,83 @@ public class ProductoController {
         return "layout/listadoProductos";
     }
 
+    @GetMapping("/carrito")
+    public String verCarrito(Model modelo) {
+
+        List<DetalleFactura> detallesFactura = new ArrayList<>();
+        var articulosCarrito = ControladorPrincipal.productosId;
+        for (Map.Entry<Long, Integer> entry : articulosCarrito.entrySet()) {
+            Long identificador = entry.getKey();
+            Integer cantidad = entry.getValue();
+
+            var productoFacturar = this.productoService.buscar(identificador);
+
+            detallesFactura.add(DetalleFactura.builder().
+                    producto(productoFacturar)
+                    .cantidad((int) cantidad)
+                    .total(productoFacturar.getPrecioUnitario() * cantidad)
+                    .build());
+
+        }
+
+        modelo.addAttribute("detallesFactura", detallesFactura);
+
+        return "carritoForm";
+
+    }
+
+    /*
+    Este metodo muestra la factura formada y la persiste
+    */
+    @GetMapping("/carrito/facturar")
+    public String facturarCompra(
+            @SessionAttribute("detallesFactura") List<DetalleFactura> detallesFactura,
+            SessionStatus status,
+            @AuthenticationPrincipal User user,
+            Model modelo) {
+
+        var codigoFactura = new StringBuilder();
+        var random = new Random();
+        for (int i = 0; i < 10; i++) {
+            codigoFactura.append((char) (random.nextInt(26) + 'A'));
+        }
+
+        var detallesFacturaProcesar = detallesFactura;
+
+        var subtotalProcesado = 0d;
+
+        for (DetalleFactura detalleFactura : detallesFacturaProcesar) {
+            subtotalProcesado += detalleFactura.getTotal();
+        }
+
+        var ivaProcesado = subtotalProcesado * 0.14d; // Se debe de redondear pero se deben usar valor Long desde el inicio
+
+        var totalFactura = subtotalProcesado + ivaProcesado;
+
+        var cliente = this.usuarioService.buscarPorNombreDeUsuario(user.getUsername());
+
+        var nuevaFactura = Factura.builder()
+                .codigoFactura(codigoFactura.toString())
+                .fechaFactura(LocalDate.now())
+                .usuario(cliente)
+                .detallesFactura(detallesFactura)
+                .subtotal(subtotalProcesado)
+                .iva(ivaProcesado)
+                .total(totalFactura)
+                .build();
+        
+//        Se debe de poner en cada detalle la factura asociada para persistir
+        for (DetalleFactura detalleFactura : detallesFacturaProcesar) {
+            detalleFactura.setFactura(nuevaFactura);
+        }
+
+        this.facturaService.guardar(nuevaFactura); 
+        
+        modelo.addAttribute("factura", nuevaFactura);
+        modelo.addAttribute("detallesFactura", detallesFacturaProcesar);
+        
+        status.setComplete();
+        
+        return "facturaForm";
+    }
 }

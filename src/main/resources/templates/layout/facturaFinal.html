@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <section th:fragment="factura">
+            <table>
+                <thead>
+                    <tr>
+                        <th th:text="'Codigo de Factura: ' + ${factura.codigoFactura}"></th>
+                        <th th:text="'Fecha de facturacion: ' + ${factura.fechaFactura}" ></th>
+                        <th th:text="'Cliente: ' + ${factura.usuario.persona.nombre} + ' ' + ${factura.usuario.persona.apellido}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SubTotal: [[${ new java.text.DecimalFormat('#,##0.00').format(factura.subtotal)}]]</td>
+                        <td>Iva: [[${ new java.text.DecimalFormat('#,##0.00').format(factura.iva)}]]</td>
+                        <td>Total: [[${ new java.text.DecimalFormat('#,##0.00').format(factura.total)}]]</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <section th:replace="layout/detalleFactura :: detalleF"></section>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </body>
+</html>

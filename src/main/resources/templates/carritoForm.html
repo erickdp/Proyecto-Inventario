@@ -1,12 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
     <head th:replace="layout/plantilla :: head">
-        <title>Titulo</title>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8" />
     </head>
     <body>
         <header th:replace="layout/plantilla :: header"></header>
-        <section th:replace="layout/plantilla :: seccion-carrito"></section>
-        <section th:replace="layout/listadoCategoria :: listadoCategoria"></section>
+        <section th:replace="layout/detalleFactura :: detalleF"></section>
+        <form th:action="@{/proInventario/carrito/facturar}" method="GET">
+            <input type="submit" value="Pagar" />
+        </form>
         <footer th:replace="layout/plantilla :: footer"></footer>
     </body>
 </html>

@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="layout/plantilla :: head">
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+
+        <section th:fragment="detalleF">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th th:text="#{producto.nombre}"></th>
+                        <th th:text="#{producto.precio}"></th>
+                        <th th:text="'Cantidad'"></th>
+                        <th th:text="'Total'"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="detalle, contador : ${detallesFactura}">
+                        <td>[[${contador.count}]]</td>
+                        <td>[[${detalle.producto.nombre}]]</td>
+                        <td>[[${new java.text.DecimalFormat('#,##0.00').format(detalle.producto.precioUnitario)}]]</td>
+                        <td>[[${detalle.cantidad}]]</td>
+                        <td>[[${detalle.total}]]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </body>
+</html>

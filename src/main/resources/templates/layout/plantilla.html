@@ -15,14 +15,6 @@
                         <span sec:authentication="name">Usuario</span>
                     </a>
                 </li>
-                <li sec:authorize="hasRole('ROLE_USER')">
-                    <div th:if="${productosCarrito} != 0">
-                        <a th:href="@{/carrito/objetosCompra}" th:text="'Objetos en carrito:' + ${productosCarrito}"></a>
-                    </div>
-                    <div th:if="${productosCarrito} == 0">
-                        <a th:href="@{/carrito/objetosCompra}" th:text="'Aun no hay objetos que comprar'"></a>
-                    </div>
-                </li>
                 <li>
                     <form th:action="@{/logout}" method="POST">
                         <a href="#" onclick="this.parentNode.submit();">
@@ -32,6 +24,16 @@
                 </li>
             </ul>
         </header>
+        <section th:fragment="seccion-carrito">
+            <div sec:authorize="hasRole('ROLE_USER')">
+                <div th:if="${productosCarrito} != 0">
+                    <a th:href="@{/proInventario/carrito}" th:text="'Objetos en carrito:' + ${productosCarrito}"></a>
+                </div>
+                <div th:if="${productosCarrito} == 0">
+                    <a th:href="@{/proInventario/carrito}" th:text="'Aun no hay objetos que comprar'"></a>
+                </div>
+            </div>
+        </section>
         <footer th:fragment="footer">
             <p>
                 <a th:href="@{/inventario/(lang=es)}">ES</a> |
